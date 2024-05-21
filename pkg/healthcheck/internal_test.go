@@ -69,4 +69,10 @@ func parseHealthCheckResponse(t *testing.T, resp *http.Response) healthCheckResp
 	err = json.Unmarshal(body, &hr)
 	require.NoError(t, err)
 	return hr
+	// Add defer to close HTTP client connections
+	resp, err := http.Get("http://example.com")
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
 }
