@@ -103,6 +103,13 @@ func (s *ESStorageIntegration) initializeES(t *testing.T, allTagsAsFields bool) 
 		s.esCleanUp(t)
 	}
 	s.esCleanUp(t)
+
+	// Add defer to close HTTP client connections
+	resp, err := http.Get(queryURL)
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
 }
 
 func (s *ESStorageIntegration) esCleanUp(t *testing.T) {
