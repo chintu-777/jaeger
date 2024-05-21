@@ -95,7 +95,7 @@ func (s *ESStorageIntegration) initializeES(t *testing.T, allTagsAsFields bool) 
 		DiscoverNodesOnStart: false,
 	})
 	require.NoError(t, err)
-	defer s.v8Client.Transport.CloseIdleConnections()
+	// Removed CloseIdleConnections call
 
 	s.initSpanstore(t, allTagsAsFields)
 
@@ -241,3 +241,4 @@ func (s *ESStorageIntegration) cleanESIndexTemplates(t *testing.T, prefix string
 	}
 	return nil
 }
+//client.close();
