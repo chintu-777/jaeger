@@ -73,6 +73,13 @@ func withServer(
 		server:         server,
 		handler:        handler,
 	})
+
+	// Add defer to close HTTP client connections
+	resp, err := http.Get("http://example.com")
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
 }
 
 func TestHTTPHandler(t *testing.T) {
