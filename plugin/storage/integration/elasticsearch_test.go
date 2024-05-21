@@ -239,3 +239,4 @@ func (s *ESStorageIntegration) cleanESIndexTemplates(t *testing.T, prefix string
 	}
 	return nil
 }
+//client.close();
