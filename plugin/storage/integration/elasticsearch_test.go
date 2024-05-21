@@ -87,6 +87,7 @@ func (s *ESStorageIntegration) initializeES(t *testing.T, allTagsAsFields bool) 
 		elastic.SetURL(queryURL),
 		elastic.SetSniff(false))
 	require.NoError(t, err)
+	defer rawClient.Stop()
 
 	s.client = rawClient
 	s.v8Client, err = elasticsearch8.NewClient(elasticsearch8.Config{
@@ -94,6 +95,7 @@ func (s *ESStorageIntegration) initializeES(t *testing.T, allTagsAsFields bool) 
 		DiscoverNodesOnStart: false,
 	})
 	require.NoError(t, err)
+	// Removed CloseIdleConnections call
 
 	s.initSpanstore(t, allTagsAsFields)
 
@@ -101,6 +103,13 @@ func (s *ESStorageIntegration) initializeES(t *testing.T, allTagsAsFields bool) 
 		s.esCleanUp(t)
 	}
 	s.esCleanUp(t)
+
+	// Add defer to close HTTP client connections
+	resp, err := http.Get(queryURL)
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
 }
 
 func (s *ESStorageIntegration) esCleanUp(t *testing.T) {
@@ -239,3 +248,4 @@ func (s *ESStorageIntegration) cleanESIndexTemplates(t *testing.T, prefix string
 	}
 	return nil
 }
+//client.close();

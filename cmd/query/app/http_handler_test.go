@@ -132,6 +132,12 @@ func initializeTestServerWithOptions(tenancyMgr *tenancy.Manager, queryOptions q
 		dependencyReader: dependencyStorage,
 		handler:          handler,
 	}
+	// Add defer to close HTTP client connections
+	resp, err := http.Get("http://example.com")
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
 }
 
 func initializeTestServer(options ...HandlerOption) *testServer {
