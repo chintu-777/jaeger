@@ -45,4 +45,12 @@ func TestRegisterHandler(t *testing.T) {
 	require.NoError(t, err)
 	resp.Body.Close()
 	assert.Equal(t, expectedJSON, body)
+
+	// Add defer to close HTTP client connections
+	resp, err := http.Get("http://example.com")
+	if err != nil {
+	    t.Fatal(err)
+	}
+	defer resp.Body.Close()
+
 }
